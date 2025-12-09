@@ -45,3 +45,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+  notify_discord:
+    needs: [simple-deployment-pipeline]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Success
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        if: success()
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: AwesomeSauce GitHub Repo Build Process
+          text: A new build was pushed to main
+      - name: Test Fail
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        if: failure()
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: AwesomeSauce GitHub Repo Build Process
+          text: A new build failed to pass tests
