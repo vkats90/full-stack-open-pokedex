@@ -28,4 +28,4 @@ jobs:
         run: echo "$COMMIT_JOINED"
       - name: putting in an if function
         if: ${{ contains(join(toJson(github.event.commits.*.message), ','),'#skip') }}
-        run: echo 'Success'
+        run: echo 'Success1'
