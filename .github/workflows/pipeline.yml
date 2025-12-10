@@ -20,6 +20,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Cache NPM dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+
       - run: npx playwright install --with-deps
       - run: npm install
       - run: npm run eslint
@@ -46,21 +58,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
   notify_discord:
-    needs: [simple-deployment-pipeline]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Test Success
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@master
         if: success()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Process
-          text: A new build was pushed to main
+          args: 'A new build on  {{ EVENT_PAYLOAD.repository.full_name }} is up.'
       - name: Test Fail
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@master
         if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Process
-          text: A new build failed to pass tests
+          args: 'Failed to deploy to {{ EVENT_PAYLOAD.repository.full_name }}.'
