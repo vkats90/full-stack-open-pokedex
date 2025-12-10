@@ -39,7 +39,7 @@ jobs:
         if: success()
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Process
+          username: AwesomeSauce GitHub Repo Build Proces
           text: A new build was pushed to main
       - name: Test Fail
         uses: rjstone/discord-webhook-notify@v2.2.1
