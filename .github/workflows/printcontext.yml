@@ -29,10 +29,7 @@ jobs:
       - name: putting in an if function
         if: ${{ contains(join(toJson(github.event.commits.*.message), ','),'#skip') }}
         run: echo 'Success1'
-      - name: print out the discord webhook
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: echo "$DISCORD_WEBHOOK"
+
   notify_discord:
     runs-on: ubuntu-latest
     steps:
