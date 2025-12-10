@@ -46,5 +46,5 @@ jobs:
         if: failure()
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Process
+          username: AwesomeSauce GitHub Repo Build Proces
           text: A new build failed to pass tests
