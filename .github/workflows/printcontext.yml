@@ -35,16 +35,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Test Success
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@master
         if: success()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Proces
-          text: A new build was pushed to main
+          args: 'A new build on  {{ EVENT_PAYLOAD.repository.full_name }} is up.'
       - name: Test Fail
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@master
         if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: AwesomeSauce GitHub Repo Build Proces
-          text: A new build failed to pass tests
+          args: 'Failed to deploy to {{ EVENT_PAYLOAD.repository.full_name }}.'
