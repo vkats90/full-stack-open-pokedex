@@ -32,8 +32,6 @@ jobs:
 
   notify_discord:
     runs-on: ubuntu-latest
-    env:
-      EMBED_STRING: '{"embeds": [{"title": "A new build on  {{ EVENT_PAYLOAD.repository.full_name }} is up.","description": "Check the repo for more info"}]}'
     steps:
       - uses: actions/checkout@v4
       - name: Test Success
@@ -41,7 +39,6 @@ jobs:
         if: success()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: ${{ toJson(env.EMBED_STRING) }}
         with:
           args: 'A new build on  {{ EVENT_PAYLOAD.repository.full_name }} is up.'
       - name: Test Fail
